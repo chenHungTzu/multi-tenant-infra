@@ -3,9 +3,15 @@ version: 0.2
 phases:
   install:
     commands:
-      - yum update -y
-      - yum install -y python3-pip
-      - pip3 install awscli
+      - | 
+         apk add --no-cache \
+         bash \
+         py-pip \
+	       jq \
+     -| 
+        pip install --upgrade \
+        pip \
+        awscli
   pre_build:
     commands:
       -   | 
