@@ -3,7 +3,9 @@ version: 0.2
 phases:
   install:
     commands:
-      - apk add --no-cache  bash  py-pip  jq  && pip install --upgrade pip awscli
+      - apt update
+      - apt install -y jq
+      - pip install --upgrade awscli
   pre_build:
     commands:
       -   | 
