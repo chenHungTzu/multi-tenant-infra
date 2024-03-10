@@ -18,7 +18,7 @@ phases:
        RateLimit: ($item.RateLimit.N | tonumber),
        BurstLimit: ($item.BurstLimit.N | tonumber),
        QuotaLimit: ($item.QuotaLimit.N | tonumber)
-       }))} > variables.tfvars.json' 
+       }))}' > variables.tfvars.json
   build:
     commands:
       - cd terraform
