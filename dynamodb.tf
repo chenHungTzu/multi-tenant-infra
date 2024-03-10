@@ -13,6 +13,4 @@ resource "aws_dynamodb_table" "tenant_quota" {
     type = "S"
     name = "TenantId"
   }
-  
-
 }

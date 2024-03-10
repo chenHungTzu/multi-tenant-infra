@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - apt-get update && apt-get install -y python3-pip
+      - pip3 install awscli
+      - wget https://releases.hashicorp.com/terraform/1.0.0/terraform_1.0.0_linux_amd64.zip
+      - unzip terraform_1.0.0_linux_amd64.zip -d /usr/local/bin/
+  pre_build:
+    commands:
+      -   | 
+       aws dynamodb scan --table-name tenant-quota | jq '{input: (reduce .Items[] as $item ({}; .[$item.TenantId.S] = {
+       QuotaOffeset: ($item.QuotaOffeset.N | tonumber),
+       QuotaPeriod: $item.QuotaPeriod.S,
+       RateLimit: ($item.RateLimit.N | tonumber),
+       BurstLimit: ($item.BurstLimit.N | tonumber),
+       QuotaLimit: ($item.QuotaLimit.N | tonumber)
+       }))} > variables.tfvars.json' 
+  build:
+    commands:
+      - cd terraform
+      - terraform init
+      - terraform apply -auto-approve -var-file=variables.tfvars.json
