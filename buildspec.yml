@@ -21,6 +21,5 @@ phases:
        }))}' > variables.tfvars.json
   build:
     commands:
-      - cd terraform
       - terraform init
       - terraform apply -auto-approve -var-file=variables.tfvars.json
