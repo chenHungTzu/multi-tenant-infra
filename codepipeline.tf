@@ -292,7 +292,7 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_pipeline_trigger_policy_at
 }
 
 
-resource "aws_cloudwatch_event_rule" "every_day_run_codepipeline" {
+resource "aws_cloudwatch_event_rule" "every_day_run_codepipeline_rule" {
   name = "every_day_run_code_pipeline"
 
   description         = "trigger codepipeline every day"
@@ -304,8 +304,46 @@ resource "aws_cloudwatch_event_rule" "every_day_run_codepipeline" {
 }
 
 resource "aws_cloudwatch_event_target" "every_day_event_target" {
-  rule      = aws_cloudwatch_event_rule.every_day_run_codepipeline.name
+  rule      = aws_cloudwatch_event_rule.every_day_run_codepipeline_rule.name
   target_id = "trigger-codepipeline"
   arn       = aws_codepipeline.codepipeline.arn
+  role_arn  = aws_iam_role.eventbridge_codepipeline_role.arn
 }
 
+resource "aws_iam_policy" "eventbridge_codepipeline_policy" {
+  name        = "eventbridge_codepipeline_policy"
+  description = "Allow EventBridge to start CodePipeline"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "codepipeline:StartPipelineExecution"
+        Effect = "Allow"
+        Resource = aws_codepipeline.codepipeline.arn
+      },
+    ]
+  })
+}
+resource "aws_iam_role" "eventbridge_codepipeline_role" {
+  name = "eventbridge_codepipeline_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+        Effect = "Allow"
+        Sid = ""
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "eventbridge_codepipeline_policy_attach" {
+  role       = aws_iam_role.eventbridge_codepipeline_role.name
+  policy_arn = aws_iam_policy.eventbridge_codepipeline_policy.arn
+}
