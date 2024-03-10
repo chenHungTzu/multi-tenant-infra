@@ -293,14 +293,10 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_pipeline_trigger_policy_at
 
 
 resource "aws_cloudwatch_event_rule" "every_day_run_codepipeline_rule" {
-  name = "every_day_run_code_pipeline"
-
+  name = "every_day_run_codepipeline"
   description         = "trigger codepipeline every day"
   schedule_expression = "cron(0 0 * * ? *)"
 
-  depends_on = [
-    aws_codepipeline.codepipeline,
-  ]
 }
 
 resource "aws_cloudwatch_event_target" "every_day_event_target" {

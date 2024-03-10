@@ -52,8 +52,20 @@ resource "aws_api_gateway_deployment" "agw_deployment" {
   stage_name  = "dev"
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
 
+
+  // 使用當前時間作為其中一個觸發器，確保每次 Terraform 套用時都會重新部署
+  triggers = {
+    redeployment = sha256(jsonencode(aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method))
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
   depends_on = [
     aws_api_gateway_method.multi_tenant_api_gateway_admin_ddb_method,
-    aws_api_gateway_integration.multi_tenant_api_gateway_admin_ddb_method_integration
+    aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method,
+    aws_api_gateway_integration.multi_tenant_api_gateway_admin_ddb_method_integration,
+    aws_api_gateway_integration.multi_tenant_api_gateway_custom_any_method_integration
   ]
 }
