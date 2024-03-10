@@ -197,7 +197,8 @@ resource "aws_iam_role_policy" "codebuild_role_policy" {
         "lambda:*",
         "iam:*",
         "dynamodb:*",
-        "apigateway:*"
+        "apigateway:*",
+        "codecommit"
 
       ]
     },
