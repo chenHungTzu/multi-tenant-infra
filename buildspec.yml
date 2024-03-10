@@ -6,6 +6,9 @@ phases:
       - apt update
       - apt install -y jq
       - pip install --upgrade awscli
+      - curl -s -qL -o terraform_install.zip https://releases.hashicorp.com/terraform/0.11.13/terraform_0.11.13_linux_amd64.zip
+      - unzip terraform_install.zip -d /usr/bin/
+      - chmod +x /usr/bin/terraform
   pre_build:
     commands:
       -   | 
