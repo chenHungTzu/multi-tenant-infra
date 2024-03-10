@@ -232,7 +232,7 @@ resource "aws_cloudwatch_event_rule" "cloudwatch_event_rule" {
        "referenceUpdated"
       ],
      "referenceType":["branch"],
-     "referenceName": ["master"]
+     "referenceName": ["main"]
   }
 }
 PATTERN
