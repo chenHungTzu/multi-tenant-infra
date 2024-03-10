@@ -12,7 +12,7 @@ aws s3api create-bucket --bucket tflock-multiple-tenant \
 
 
 3.執行第一次
-terraform destroy --auto-approve
+terraform apply --auto-approve
 
 
 4.推送至codecommit
