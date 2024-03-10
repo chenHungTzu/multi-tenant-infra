@@ -112,7 +112,7 @@ resource "aws_api_gateway_method_response" "customer_response_200" {
 resource "aws_api_gateway_integration_response" "customer_response_200" {
   count = length(var.input) == 0  ? 0 : 1
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
-  resource_id =  aws_api_gateway_resource.multi_tenant_api_gateway_custom_proxy_resource[0].id
+  resource_id = aws_api_gateway_resource.multi_tenant_api_gateway_custom_proxy_resource[0].id
   http_method = aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method[0].http_method
   status_code = aws_api_gateway_method_response.customer_response_200[0].status_code
 

@@ -51,7 +51,7 @@ resource "aws_api_gateway_resource" "multi_tenant_api_gateway_admin_ddb_resource
 }
 
 
-// Create a method for the resource
+// Create a method for the dynamodb 
 resource "aws_api_gateway_method" "multi_tenant_api_gateway_admin_ddb_method" {
   rest_api_id      = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   resource_id      = aws_api_gateway_resource.multi_tenant_api_gateway_admin_ddb_resource.id
@@ -59,6 +59,9 @@ resource "aws_api_gateway_method" "multi_tenant_api_gateway_admin_ddb_method" {
   authorization    = "NONE"
   api_key_required = true
 }
+
+
+
 
 // intergrate the method with dynamodb
 resource "aws_api_gateway_integration" "multi_tenant_api_gateway_admin_ddb_method_integration" {
@@ -68,7 +71,7 @@ resource "aws_api_gateway_integration" "multi_tenant_api_gateway_admin_ddb_metho
   type                    = "AWS"
   integration_http_method = "POST"
   uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:dynamodb:action/PutItem"
-  credentials             = aws_iam_role.api_gateway_dynamodb_role.arn
+  credentials             = aws_iam_role.api_gateway_admin_role.arn
 
   request_templates = {
     "application/json" = <<EOF
@@ -133,5 +136,4 @@ resource "aws_api_gateway_integration_response" "response_200" {
     aws_api_gateway_method_response.response_200,
   ]
 }
-
 

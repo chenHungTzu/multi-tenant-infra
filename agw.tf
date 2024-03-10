@@ -1,12 +1,12 @@
 // agw execution role
 
 # The policy document to access the role
-data "aws_iam_policy_document" "agw_dynamodb_policy" {
+data "aws_iam_policy_document" "agw_admin_policy" {
   depends_on = [aws_dynamodb_table.tenant_quota]
   statement {
     sid = ""
     actions = [
-      "dynamodb:*"
+      "dynamodb:*",
     ]
     resources = [
       aws_dynamodb_table.tenant_quota.arn,
@@ -15,8 +15,8 @@ data "aws_iam_policy_document" "agw_dynamodb_policy" {
 }
 
 # The IAM Role for the execution
-resource "aws_iam_role" "api_gateway_dynamodb_role" {
-  name               = "api_gateway_dynamodb_role"
+resource "aws_iam_role" "api_gateway_admin_role" {
+  name               = "api_gateway_admin_role"
   assume_role_policy = <<-EOF
   {
     "Version": "2012-10-17",
@@ -36,8 +36,8 @@ resource "aws_iam_role" "api_gateway_dynamodb_role" {
 
 resource "aws_iam_role_policy" "example_policy" {
   name   = "example_policy"
-  role   = aws_iam_role.api_gateway_dynamodb_role.id
-  policy = data.aws_iam_policy_document.agw_dynamodb_policy.json
+  role   = aws_iam_role.api_gateway_admin_role.id
+  policy = data.aws_iam_policy_document.agw_admin_policy.json
 }
 
 
