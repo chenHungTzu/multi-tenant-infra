@@ -57,6 +57,8 @@ resource "aws_api_gateway_integration" "multi_tenant_api_gateway_custom_any_meth
 resource "aws_api_gateway_api_key" "custom" {
   for_each = var.input
   name     = "${each.key}"
+
+  depends_on = [ aws_api_gateway_resource.multi_tenant_api_gateway_custom_root_resource ]
 }
 
 // custom's usage plan
