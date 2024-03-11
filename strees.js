@@ -3,16 +3,16 @@ import { sleep ,check} from 'k6';
 
 export let options = {
     vus: 1, // 這邊固定負載，分別以1、2個vu 來測試
-    duration: '1m', // 持續時間一分鐘
+    duration: '2m', // 持續時間兩分鐘
 };
 export default function () {
     const params = {
         headers: {
-            'x-api-key': 'IBcj89MIQ11dBkLALO74u3NGEVbqyXdh6RTxGZt6', 
+            'x-api-key': 'j3PQgKbuNA8NKhjkVayOxOgMBgtBcmL4bk3L1SUf', 
         },
     };
     // 這邊是要測試的API
-    let response = http.get('https://qxvp8ppcac.execute-api.ap-northeast-1.amazonaws.com/dev/custom/IkeX/SomeAPI', params); 
+    let response = http.get('https://qxvp8ppcac.execute-api.ap-northeast-1.amazonaws.com/dev/custom/IkeM/SomeAPI', params); 
 
     console.log(response.status);
     console.log(response.body);
