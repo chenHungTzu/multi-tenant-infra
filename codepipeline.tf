@@ -131,7 +131,7 @@ resource "aws_codepipeline" "codepipeline" {
 
       configuration = {
         ProjectName = "${aws_codebuild_project.project.name}"
-       
+
       }
     }
 
@@ -293,7 +293,7 @@ resource "aws_iam_role_policy_attachment" "cloudwatch_pipeline_trigger_policy_at
 
 
 resource "aws_cloudwatch_event_rule" "every_day_run_codepipeline_rule" {
-  name = "every_day_run_codepipeline"
+  name                = "every_day_run_codepipeline"
   description         = "trigger codepipeline every day"
   schedule_expression = "cron(0 0 * * ? *)"
 
@@ -314,8 +314,8 @@ resource "aws_iam_policy" "eventbridge_codepipeline_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "codepipeline:StartPipelineExecution"
-        Effect = "Allow"
+        Action   = "codepipeline:StartPipelineExecution"
+        Effect   = "Allow"
         Resource = aws_codepipeline.codepipeline.arn
       },
     ]
@@ -333,7 +333,7 @@ resource "aws_iam_role" "eventbridge_codepipeline_role" {
           Service = "events.amazonaws.com"
         }
         Effect = "Allow"
-        Sid = ""
+        Sid    = ""
       },
     ]
   })

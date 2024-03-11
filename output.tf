@@ -8,6 +8,6 @@ output "adminkey" {
 output "customerkey" {
   value = { for k, v in aws_api_gateway_api_key.custom : k => {
     name  = v.name
-    value = nonsensitive(v.value) 
+    value = nonsensitive(v.value)
   } }
 }

@@ -1,50 +1,50 @@
 // Create a resource (for custom root)
 resource "aws_api_gateway_resource" "multi_tenant_api_gateway_custom_root_resource" {
-  count = length(var.input) == 0 ? 0 : 1
+  count       = length(var.input) == 0 ? 0 : 1
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   path_part   = "custom"
   parent_id   = aws_api_gateway_rest_api.multi_tenant_api_gateway.root_resource_id
 }
 
 resource "aws_api_gateway_resource" "multi_tenant_api_gateway_custom_tenant_resource" {
-  count = length(var.input) == 0  ? 0 : 1
+  count       = length(var.input) == 0 ? 0 : 1
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   path_part   = "{tenantId}"
   parent_id   = aws_api_gateway_resource.multi_tenant_api_gateway_custom_root_resource[0].id
 }
 
 resource "aws_api_gateway_resource" "multi_tenant_api_gateway_custom_proxy_resource" {
-  count = length(var.input) == 0  ? 0 : 1
+  count       = length(var.input) == 0 ? 0 : 1
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   path_part   = "{proxy+}"
   parent_id   = aws_api_gateway_resource.multi_tenant_api_gateway_custom_tenant_resource[0].id
 
-  
+
 }
 
 resource "aws_api_gateway_method" "multi_tenant_api_gateway_any_resource_method" {
-  count = length(var.input) == 0 ? 0 : 1
+  count            = length(var.input) == 0 ? 0 : 1
   rest_api_id      = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   resource_id      = aws_api_gateway_resource.multi_tenant_api_gateway_custom_proxy_resource[0].id
   http_method      = "ANY"
   authorization    = "NONE"
   api_key_required = true
 
-   request_parameters = {
-    "method.request.path.tenantId"   = true
+  request_parameters = {
+    "method.request.path.tenantId" = true
   }
 }
 
 
 // intergrate the method with mock
 resource "aws_api_gateway_integration" "multi_tenant_api_gateway_custom_any_method_integration" {
-  for_each     = var.input
+  for_each    = var.input
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   resource_id = aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method[0].resource_id
   http_method = aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method[0].http_method
   type        = "MOCK"
-  
-  request_templates       = {
+
+  request_templates = {
     "application/json" = "{\"statusCode\": 200}"
   }
   request_parameters = {
@@ -56,9 +56,9 @@ resource "aws_api_gateway_integration" "multi_tenant_api_gateway_custom_any_meth
 // customer key
 resource "aws_api_gateway_api_key" "custom" {
   for_each = var.input
-  name     = "${each.key}"
+  name     = each.key
 
-  depends_on = [ aws_api_gateway_resource.multi_tenant_api_gateway_custom_root_resource ]
+  depends_on = [aws_api_gateway_resource.multi_tenant_api_gateway_custom_root_resource]
 }
 
 // custom's usage plan
@@ -98,7 +98,7 @@ resource "aws_api_gateway_usage_plan_key" "custom" {
 
 
 resource "aws_api_gateway_method_response" "customer_response_200" {
-  count = length(var.input) == 0  ? 0 : 1
+  count       = length(var.input) == 0 ? 0 : 1
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   resource_id = aws_api_gateway_resource.multi_tenant_api_gateway_custom_proxy_resource[0].id
   http_method = aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method[0].http_method
@@ -112,7 +112,7 @@ resource "aws_api_gateway_method_response" "customer_response_200" {
 }
 
 resource "aws_api_gateway_integration_response" "customer_response_200" {
-  count = length(var.input) == 0  ? 0 : 1
+  count       = length(var.input) == 0 ? 0 : 1
   rest_api_id = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
   resource_id = aws_api_gateway_resource.multi_tenant_api_gateway_custom_proxy_resource[0].id
   http_method = aws_api_gateway_method.multi_tenant_api_gateway_any_resource_method[0].http_method
