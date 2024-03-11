@@ -72,7 +72,7 @@ resource "aws_api_gateway_usage_plan" "custom" {
     throttle {
       path        = "/${aws_api_gateway_resource.multi_tenant_api_gateway_custom_root_resource[0].path_part}/{tenantId}/{proxy+}/ANY"
       burst_limit = each.value.RateLimit
-      rate_limit  = each.value.RateLimit
+      rate_limit  = each.value.BurstLimit
     }
   }
 
