@@ -8,11 +8,11 @@ export let options = {
 export default function () {
     const params = {
         headers: {
-            'x-api-key': 'j3PQgKbuNA8NKhjkVayOxOgMBgtBcmL4bk3L1SUf', 
+            'x-api-key': '<key>', 
         },
     };
     // 這邊是要測試的API
-    let response = http.get('https://qxvp8ppcac.execute-api.ap-northeast-1.amazonaws.com/dev/custom/IkeM/SomeAPI', params); 
+    let response = http.get('https://<id>.execute-api.ap-northeast-1.amazonaws.com/dev/custom/IkeMM/SomeAPI', params); 
 
     console.log(response.status);
     console.log(response.body);
