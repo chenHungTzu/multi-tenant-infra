@@ -71,15 +71,15 @@ resource "aws_api_gateway_usage_plan" "custom" {
     stage  = aws_api_gateway_deployment.agw_deployment.stage_name
     throttle {
       path        = "/${aws_api_gateway_resource.multi_tenant_api_gateway_custom_root_resource[0].path_part}/{tenantId}/{proxy+}/ANY"
-      burst_limit = 1
-      rate_limit  = 1
+      burst_limit = each.value.RateLimit
+      rate_limit  = each.value.RateLimit
     }
   }
 
   quota_settings {
-    limit  = 100
-    offset = 0
-    period = "DAY"
+    limit  = each.value.QuotaLimit
+    offset = each.value.QuotaOffeset
+    period = each.value.QuotaPeriod
   }
 
   throttle_settings {

@@ -6,6 +6,9 @@ variable "input" {
     BurstLimit   = number
     RateLimit    = number
   }))
+  default = {
+    
+  }
 }
 variable "tags" {
   default = {

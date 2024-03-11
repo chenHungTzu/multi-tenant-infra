@@ -12,24 +12,25 @@ aws s3api create-bucket --bucket tflock-multiple-tenant \
 
 
 3.執行第一次
+terraform init
 terraform apply --auto-approve
 
-
-4.推送至codecommit
-git push https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/tf-codecommit
-
-
-5.等待codepipeline 執行完畢.
-
-6.呼叫api gateway 建立tenant
-https://<id>.execute-api.ap-northeast-1.amazonaws.com/dev/admin/tenant-quota
-{
-    "TenantId" : "TenantId",
+4.建立用戶設定
+curl --location 'https://<id>.execute-api.ap-northeast-1.amazonaws.com/dev/admin/tenant-quota' \
+--header 'x-api-key: <key>' \
+--header 'Content-Type: application/json' \
+--data '{
+    "TenantId" : "IkeX",
     "QuotaOffeset" : 0,
-    "QuotaLimit" : 300,
+    "QuotaLimit" : 200,
     "QuotaPeriod" : "DAY",
     "BurstLimit" : 2,
     "RateLimit": 1
-}
+}'
 
-7.重新觸發codepipeline.
+5.推送至codecommit
+git push https://git-codecommit.ap-northeast-1.amazonaws.com/v1/repos/tf-codecommit
+
+
+6.等待codepipeline 執行完畢.
+

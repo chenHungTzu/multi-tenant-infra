@@ -60,9 +60,6 @@ resource "aws_api_gateway_method" "multi_tenant_api_gateway_admin_ddb_method" {
   api_key_required = true
 }
 
-
-
-
 // intergrate the method with dynamodb
 resource "aws_api_gateway_integration" "multi_tenant_api_gateway_admin_ddb_method_integration" {
   rest_api_id             = aws_api_gateway_rest_api.multi_tenant_api_gateway.id
@@ -95,9 +92,7 @@ resource "aws_api_gateway_integration" "multi_tenant_api_gateway_admin_ddb_metho
           },
            "RateLimit": {
               "N": "$input.path('$.RateLimit')"
-          }
-
-       
+          }   
         }
       }
     EOF
